@@ -7,15 +7,9 @@ import seaborn as sns
 import os
 
 # Ruta del modelo guardado
-MODEL_PATH = r"C:\Users\enzoc\OneDrive\Escritorio\Proyecto_emociones\models\modelo_final.h5"
-
-# Directorio de prueba
+MODEL_PATH = r"C:\Users\enzoc\OneDrive\Escritorio\Proyecto_emociones\models\mejor_modelo.h5"
 TEST_DIR = r"C:\Users\enzoc\OneDrive\Escritorio\Proyecto_emociones\data\test"
-
-# Cargar el modelo
 model = tf.keras.models.load_model(MODEL_PATH)
-
-# Preparar generador de datos para test
 test_datagen = ImageDataGenerator(rescale=1./255)
 
 test_generator = test_datagen.flow_from_directory(
@@ -30,13 +24,9 @@ test_generator = test_datagen.flow_from_directory(
 test_loss, test_acc = model.evaluate(test_generator, verbose=1)
 print(f"🔹 Precisión en test: {test_acc*100:.2f}%")
 print(f"🔹 Pérdida en test: {test_loss:.4f}")
-
-# Obtener predicciones
 predictions = model.predict(test_generator)
 y_pred = np.argmax(predictions, axis=1)
 y_true = test_generator.classes
-
-# Reporte de clasificación
 print("\n🔹 Clasificación por clases:")
 print(classification_report(y_true, y_pred, target_names=test_generator.class_indices.keys()))
 
